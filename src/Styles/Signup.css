@@ -8,3 +8,11 @@
     font-size: 120%;
     font-weight: bold;
 }
+  .signup-wrapper{   
+    align-content: center; border: 1px solid #E5E5E5 ; margin: 0 auto; 
+    padding: 2% 10%;
+  } 
+#paypal{
+  margin-top: 4%;
+  background-color: #1A1A1A;
+}

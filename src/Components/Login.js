@@ -24,6 +24,7 @@ export default class Login extends Component {
     //OnClick event on the login button
     login = (e) => {
         e.preventDefault();
+        console.log("Clicked");
         // debugger;
 
     }
@@ -32,7 +33,7 @@ export default class Login extends Component {
 
         return (
             <Container>
-                <div className="wrapper">
+                <div className="login-wrapper">
                     <div className="header">
                         <h2 className="text-center">Log In</h2>
                         <div className="text-center">to continue to site</div>
@@ -73,7 +74,7 @@ export default class Login extends Component {
                         </FormGroup>
                         <hr />
                         <FormGroup className="text-center">
-                            <div>Don't have an account?</div>
+                            <div className="acctInfo">Don't have an account?</div>
                             <Link to="/Register" className="btn btn-link" aria-label="re-direct to sign-up page" style={{ color: "black" }}>Sign Up Here</Link>
                         </ FormGroup>
                     </Form>

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Container, Label, Form, FormGroup, FormText, Input } from 'reactstrap';
+import { Container, Label, Form, FormGroup, FormText, Input, Button } from 'reactstrap';
 
 export default class Register extends Component {
     constructor() {
@@ -38,12 +38,12 @@ export default class Register extends Component {
     render() {
         return (
             <Container>
-                <div className="wrapper">
+                <div className="signup-wrapper flex justify-center flex-wrap" >
                     <div className="header" style={{ paddingBottom: "2%" }}>
                         <h2 className="text-left">Membership</h2>
                     </div>
 
-                    <Form name="form" onSubmit={this.register}>
+                    <Form name="form" action="#" method="post" onSubmit={this.register}>
 
                         <FormGroup>
                             <Label className="header-label" for="MembershipType">Membership Type:<span className="impt">*</span></Label>
@@ -137,7 +137,7 @@ export default class Register extends Component {
 
                         <FormGroup>
                             <Label className="header-label" for="email">Email Address:<span className="impt">*</span></Label>
-                            <Input type="text" className="form-control" value={this.state.Email} onChange={this.Email} required />
+                            <Input type="text" className="form-control" onChange={this.Email} required />
                         </FormGroup>
 
                         <FormGroup>
@@ -241,16 +241,20 @@ export default class Register extends Component {
                         </FormGroup>
                         <hr />
                         <FormGroup className="text-center">
-                            <div>Already have an account?</div>
+                            <div className="acctInfo">Already have an account?</div>
                             <Link to="/Login" alt="Login Link" aria-label="re-direct to log-in page" className="btn btn-link" style={{ color: "black" }}>Log In</Link>
                         </ FormGroup>
                     </Form>
 
-                    {/* <h2>Pay with PayPal</h2>
+                    <h4>Pay with PayPal</h4>
                     Pay online using your PayPal account, or using your credit card, with secure PayPal, use the Donate button below.
-                    <button>Donate</button> */}
-                </div>
-            </Container>
+
+                    <div>
+                        <Button id="paypal" >Donate</Button>
+                    </div>
+
+                </div >
+            </Container >
 
         )
     }

@@ -1,6 +1,3 @@
-.wrapper{  
-    align-content: center; border: 1px solid #E5E5E5 ; margin: 2% auto; padding: 2% 20%; 
-  } 
   #button{ 
       margin-top: 25px;
       height: 50px;
@@ -9,9 +6,10 @@
       font-weight: bold;
   }  
   a:hover{
-        font-weight: bold;
+      font-weight: bold;
       color: white;
       text-decoration: none;
-    }
-  
-  
+  }
+ .acctInfo{
+   font-weight: bold;
+ }
