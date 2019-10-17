@@ -11,7 +11,7 @@ import * as serviceWorker from './serviceWorker';
 ReactDOM.render(
     <BrowserRouter>
         <React.Fragment>
-            <Route exact path='/' component={Review} />
+            <Route exact path='/Review' component={Review} />
             <Route path='/Login' component={Login} />
             <Route path='/Register' component={Register} />
         </React.Fragment>

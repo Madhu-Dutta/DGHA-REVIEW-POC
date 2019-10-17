@@ -8,42 +8,23 @@ export default class Login extends Component {
 
         //Initial state
         this.state = {
-            UserName: '',
+            Email: '',
             Password: ''
         }
 
     }
 
-    handleUsernameChange = (e) => {
+    Email = (e) => {
         this.setState({ UserName: e.target.value });
     }
     //Password update on input text change
-    handlePasswordChange = (e) => {
+    Password = (e) => {
         this.setState({ Password: e.target.value });
     }
     //OnClick event on the login button
     login = (e) => {
         e.preventDefault();
-
         // debugger;
-        fetch('http://localhost:52575/Api/login/Login', {
-            method: 'post',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                UserName: this.state.UserName,
-                Password: this.state.Password
-            })
-        }).then((Response) => Response.json())
-            .then((result) => {
-                console.log(result);
-                if (result.Status === 'Invalid')
-                    alert('Invalid User');
-                else
-                    this.props.history.push("/");
-            })
 
     }
 
@@ -62,10 +43,10 @@ export default class Login extends Component {
                     <Form name="form" onSubmit={this.login}>
 
                         <FormGroup>
-                            <Input type="text" className="form-control" onChange={this.handleUsernameChange} name="Username" placeholder="UserName" required />
+                            <Input type="text" className="form-control" onChange={this.Email} name="Email" placeholder="Email" required />
                         </FormGroup>
                         <FormGroup>
-                            <Input type="password" className="form-control" onChange={this.handlePasswordChange} name="password" placeholder="Password" required />
+                            <Input type="password" className="form-control" onChange={this.Password} name="password" placeholder="Password" required />
                         </FormGroup>
                         <FormGroup>
                             <Row>
