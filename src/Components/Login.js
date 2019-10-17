@@ -51,7 +51,7 @@ export default class Login extends Component {
                         </FormGroup>
                         <FormGroup>
                             <Row>
-                                <Col md={6}>
+                                <Col xs={6}>
                                     <FormGroup check>
                                         <Label check>
                                             <Input type="checkbox" />{' '}
@@ -59,7 +59,7 @@ export default class Login extends Component {
                                 </Label>
                                     </FormGroup>
                                 </Col>
-                                <Col md={6}>
+                                <Col xs={6}>
                                     <Link to="/Register" style={{ color: "black" }}>Forgot Password?</Link>
                                 </Col>
                             </Row>
