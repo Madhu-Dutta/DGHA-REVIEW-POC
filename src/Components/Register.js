@@ -242,7 +242,7 @@ export default class Register extends Component {
                         <hr />
                         <FormGroup className="text-center">
                             <div className="acctInfo">Already have an account?</div>
-                            <Link to="/Login" alt="Login Link" aria-label="re-direct to log-in page" className="btn btn-link" style={{ color: "black" }}>Log In</Link>
+                            <Link to="/" alt="Login Link" aria-label="re-direct to log-in page" className="btn btn-link" style={{ color: "black" }}>Log In</Link>
                         </ FormGroup>
                     </Form>
 
