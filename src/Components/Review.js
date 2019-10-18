@@ -18,7 +18,7 @@ export default class Review extends Component {
     }
     render() {
         if (this.state.redirect === true) {
-            this.props.history.push("/Login");
+            this.props.history.push("/");
         }
         return (
             <div>

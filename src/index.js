@@ -15,7 +15,7 @@ ReactDOM.render(
             {/* <Route exact path='/' component={Review} /> */}
             <Route exact path='/' component={Login} />
             <Route path='/Register' component={Register} />
-            <Route exact path='/Review' component={Review} />
+            <Route path='/Review' component={Review} />
 
         </React.Fragment>
     </BrowserRouter>, document.getElementById('root'));
