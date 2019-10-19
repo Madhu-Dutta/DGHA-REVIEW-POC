@@ -2,9 +2,21 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Container, Label, Form, FormGroup, FormText, Input, Button } from 'reactstrap';
 
+const emailRegex = RegExp(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/);
+
+const formValid = formErrors => {
+    let valid = true;
+
+    Object.values(formErrors).forEach(val => {
+        // if we have an error string set valid to false
+        val.length > 0 && (valid = false)
+    });
+    return valid;
+}
+
 export default class Register extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             firstName: '',
             lastName: '',
@@ -25,14 +37,48 @@ export default class Register extends Component {
             position: '',
             trainedFor: '',
             workFor: '',
-            otherTraining: ''
+            otherTraining: '',
+            //Validation
+            formErrors: {
+                firstName: '',
+                lastName: '',
+                email: ''
+            }
         }
     }
 
     handleInputChange = (e) => {
+        e.preventDefault();
+
+        const {name, value} = e.target;
+        let formErrors = this.state.formErrors;
+
+        switch(name){
+            case 'firstName':
+                formErrors.firstName =
+                value.length < 3 
+                ? "minimum 3 characters required" : "";
+                break;
+
+            case 'lastName':
+                formErrors.lastName =
+                value.length < 3 && value.length > 0 
+                ? "minimum 3 characters required" : "";
+                break;
+
+            case 'email':
+                formErrors.email =
+                emailRegex.test(value) && value.length > 0 
+                ? "": "invalid email address";
+                break;    
+
+            default:
+                break;
+        }
+
         //Handle change events on input fields
-        this.setState({ [e.target.name]: e.target.value })
-        // console.log(this.state);
+        this.setState({ formErrors, [name]: value}, () => console.log(this.state));
+        
     }
 
     handleTrainedForOptionChange = (e) => {
@@ -57,50 +103,59 @@ export default class Register extends Component {
     }
 
     register = (e) => {
+        //prevent browser from auto-submitting
         e.preventDefault();
         console.log(this.state);
-        // fetch('http://dgha-backend-aus-east.azurewebsites.net/api/members', {
+
+        if(formValid(this.state.formErrors)){
+            // fetch('http://dgha-backend-aus-east.azurewebsites.net/api/members', {
             //Typicode post test
-        fetch('https://jsonplaceholder.typicode.com/posts', {
-            method: 'post',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                firstName: this.state.firstName,
-                lastName: this.state.lastName,
-                email: this.state.email,   
-                membershipType: '',
-                title: this.state.title,
-                dob: this.state.dob,
-                streetAddress: this.state.streetAddress,
-                suburb: this.state.suburb,
-                state: this.state.state,
-                dogHistory: this.state.dogHistory,
-                //Need some extra fields in the backend
-                postcode: this.state.postcode,
-                phone: this.state.phone,
-                breed: this.state.breed,
-                organization: this.state.organization,
-                dogGuideProv: this.state.dogGuideProv,
-                position: this.state.position,
-                trainedFor: this.state.trainedFor,
-                workFor: this.state.workFor, 
-                otherTraining: this.state.otherTraining,        
+            fetch('https://jsonplaceholder.typicode.com/posts', {
+                method: 'post',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    firstName: this.state.firstName,
+                    lastName: this.state.lastName,
+                    email: this.state.email,   
+                    membershipType: '',
+                    title: this.state.title,
+                    dob: this.state.dob,
+                    streetAddress: this.state.streetAddress,
+                    suburb: this.state.suburb,
+                    state: this.state.state,
+                    dogHistory: this.state.dogHistory,
+                    //Need some extra fields in the backend
+                    postcode: this.state.postcode,
+                    phone: this.state.phone,
+                    breed: this.state.breed,
+                    organization: this.state.organization,
+                    dogGuideProv: this.state.dogGuideProv,
+                    position: this.state.position,
+                    trainedFor: this.state.trainedFor,
+                    workFor: this.state.workFor, 
+                    otherTraining: this.state.otherTraining,        
+                })
             })
-        })
-        .then(response => {
-            console.log(response);
-            this.props.history.push("/Review");
-        })
-        .catch(error => {
-            console.log(error);
-        })
+            .then(response => {
+                console.log(response);
+                this.props.history.push("/Review");
+            })
+            .catch(error => {
+                console.log(error);
+            })
+            console.info('valid form')
+        }else{
+            console.error('Error');
+        }
+       
     }
 
     render() {
-
+        const {formErrors} = this.state;
+        
         return (
 
             <Container>
@@ -109,27 +164,27 @@ export default class Register extends Component {
                         <h2 className="text-left">Membership</h2>
                     </div>
 
-                    <Form name="form" onSubmit={this.register}>
+                    <Form name="form" onSubmit={this.register} noValidate>
 
                          <FormGroup> 
-                        <Label className="header-label" for="MembershipType">Membership Type:<span className="impt">*</span></Label> 
+                        <Label className="header-label" htmlFor="MembershipType">Membership Type:<span className="impt">*</span></Label> 
                         <p>Please choose Full or Associate Member</p>
 
                          <FormGroup check>
-                            <Label check>
+                            <Label htmlFor="FullMember" check>
                                 <Input type="radio" 
-                                    name="membershipType" value="fullMem"
-                                    checked={this.state.membershipType === "fullMem"} 
+                                    name="membershipType" value="Full Membership"
+                                    checked={this.state.membershipType === "Full Membership"} 
                                     onChange={this.handleMemTypeOptionChange} />{' '}
                                 Full Member
                             </Label>
                         </FormGroup>
                         <FormGroup>
                             <FormGroup check>
-                                <Label check>
+                                <Label htmlFor="AssociateMember" check>
                                     <Input type="radio" 
-                                        name="membershipType" value="assoMem" 
-                                        checked={this.state.membershipType === "assoMem"} 
+                                        name="membershipType" value="Assosiate Member" 
+                                        checked={this.state.membershipType === "Assosiate Member"} 
                                         onChange={this.handleMemTypeOptionChange} />{' '}
                                     Associate Member
                             </Label>
@@ -139,7 +194,7 @@ export default class Register extends Component {
                       </FormGroup>  
 
                             <FormGroup>
-                                <Label className="header-label" for="Title">Title: <span className="impt">*</span></Label>
+                                <Label className="header-label" htmlFor="Title">Title: <span className="impt">*</span></Label>
                                 <p>Mr, Mrs, Ms, Dr, Other:</p>
                                 <Input type="text" className="form-control" 
                                     onChange={this.handleInputChange} 
@@ -150,30 +205,38 @@ export default class Register extends Component {
                             </FormText>
                             </FormGroup>  
 
-                            <FormGroup>
-                                <Label className="header-label" for="FirstName">First Name: <span className="impt">*</span></Label>
-                                <Input type="text" className="form-control" 
+                            <FormGroup>                                
+                                <Label className="header-label" htmlFor="FirstName">First Name: <span className="impt">*</span></Label>
+                                <Input type="text"
+                                className={formErrors.firstName.length > 0 ? "error" : null}                               
                                 onChange={this.handleInputChange} 
                                 name="firstName" 
-                                value={this.state.firstName} required />
+                                value={this.state.firstName}
+                                noValidate />
+                                {formErrors.firstName.length > 0 && 
+                                    <span className='errorMsg'>{formErrors.firstName}</span>} 
                                 <FormText color="muted">
                                     0-10 max characters
                             </FormText>
 
                             </FormGroup>
                             <FormGroup>
-                                <Label className="header-label" for="LastName">Last Name: <span className="impt">*</span></Label>
-                                <Input type="text" className="form-control" 
+                                <Label className="header-label" htmlFor="LastName">Last Name: <span className="impt">*</span></Label>
+                                <Input type="text" 
+                                className={formErrors.lastName.length > 0 ? "error" : null} 
                                 onChange={this.handleInputChange} 
                                 name="lastName" 
-                                value={this.state.lastName} required />
+                                value={this.state.lastName} 
+                                noValidate />
+                                {formErrors.lastName.length > 0 && 
+                                    <span className='errorMsg'>{formErrors.lastName}</span>} 
                                 <FormText color="muted">
                                     0-10 max characters
                             </FormText>
                             </FormGroup>
 
                             <FormGroup>
-                                <Label className="header-label" for="DateOfBirth">Date Of Birth(optional)</Label>
+                                <Label className="header-label" htmlFor="DateOfBirth">Date Of Birth(optional)</Label>
                                 <p>dd/mm/yyyy</p>
                                 <Input type="text" className="form-control"
                                     onChange={this.handleInputChange} 
@@ -184,7 +247,7 @@ export default class Register extends Component {
                             </FormGroup>
 
                             <FormGroup>
-                                <Label className="header-label" for="StreetOrPostalAddress">Street or Postal Address: <span className="impt">*</span></Label>
+                                <Label className="header-label" htmlFor="StreetOrPostalAddress">Street or Postal Address: <span className="impt">*</span></Label>
                                 <Input type="text" className="form-control" 
                                     onChange={this.handleInputChange} 
                                     name="streetAddress" value={this.state.streetAddress} required /> 
@@ -194,7 +257,7 @@ export default class Register extends Component {
                             </FormGroup>
 
                             <FormGroup>
-                                <Label className="header-label" for="Suburb">Suburb: <span className="impt">*</span></Label>
+                                <Label className="header-label" htmlFor="Suburb">Suburb: <span className="impt">*</span></Label>
                                 <Input type="text" className="form-control" 
                                     onChange={this.handleInputChange} 
                                     name="suburb" 
@@ -205,7 +268,7 @@ export default class Register extends Component {
                             </FormGroup>
 
                             <FormGroup>
-                                <Label className="header-label" for="StateOrTerritory">State or Territory: <span className="impt">*</span></Label>
+                                <Label className="header-label" htmlFor="StateOrTerritory">State or Territory: <span className="impt">*</span></Label>
                                 <Input type="text" className="form-control" 
                                     onChange={this.handleInputChange} 
                                     name="state" value={this.state.state} required />
@@ -215,7 +278,7 @@ export default class Register extends Component {
                             </FormGroup>
 
                             <FormGroup>
-                                <Label className="header-label" for="Postcode">Postcode: <span className="impt">*</span></Label>
+                                <Label className="header-label" htmlFor="Postcode">Postcode: <span className="impt">*</span></Label>
                                 <Input type="text" className="form-control"
                                     onChange={this.handleInputChange} 
                                     name="postcode"
@@ -226,7 +289,7 @@ export default class Register extends Component {
                             </FormGroup>
 
                             <FormGroup>
-                                <Label className="header-label" for="PhoneNumber">Phone Number: <span className="impt">*</span></Label>
+                                <Label className="header-label" htmlFor="PhoneNumber">Phone Number: <span className="impt">*</span></Label>
                                 <p>Your best contact phone number.</p>
                                 <Input type="text" className="form-control"
                                     onChange={this.handleInputChange} 
@@ -235,20 +298,25 @@ export default class Register extends Component {
                             </FormGroup>
                             
                             <FormGroup>
-                                <Label className="header-label" for="email">Email Address:<span className="impt">*</span></Label>
-                                <Input type="text" className="form-control" 
+                                <Label className="header-label" htmlFor="email">Email Address:<span className="impt">*</span></Label>
+                                <Input type="email" 
+                                    className={formErrors.email.length > 0 ? "error" : null}
                                     onChange={this.handleInputChange} 
                                     name="email" 
-                                    value={this.state.email} required />
+                                    value={this.state.email} 
+                                    noValidate />
+                                    {formErrors.email.length > 0 && (
+                                        <span className="errorMessage">{formErrors.email}</span>
+                                    )}
                             </FormGroup>
 
                             <FormGroup>
-                                <Label className="header-label" for="YourDogTrainedFor">Your dog is trained for:<span className="impt">*</span></Label>
+                                <Label className="header-label" htmlFor="YourDogTrainedFor">Your dog is trained for:<span className="impt">*</span></Label>
                                 <FormGroup check>
-                                    <Label check>
+                                    <Label htmlFor="visionImpaired" check>
                                         <Input type="radio" 
-                                            value="visionImp" 
-                                            checked={this.state.trainedFor === "visionImp"} 
+                                            value="vision Impaired" 
+                                            checked={this.state.trainedFor === "vision Impaired"} 
                                             onChange={this.handleTrainedForOptionChange}/>{' '}
                                         Dog Guide used for mobility by people who are blind or vision impaired
                             </Label>
@@ -256,10 +324,10 @@ export default class Register extends Component {
                             </FormGroup>
                             <FormGroup>
                                 <FormGroup check>
-                                    <Label check>
+                                    <Label htmlFor="puppyRaiser" check>
                                         <Input type="radio"
-                                            value="puppyRaiser" 
-                                            checked={this.state.trainedFor === "puppyRaiser"}
+                                            value="puppy Raiser" 
+                                            checked={this.state.trainedFor === "puppy Raiser"}
                                             onChange={this.handleTrainedForOptionChange}/>{' '}
                                         Puppy Raiser involved in a training program
                             </Label>
@@ -267,10 +335,10 @@ export default class Register extends Component {
                             </FormGroup>
                             <FormGroup>
                                 <FormGroup check>
-                                    <Label check>
+                                    <Label htmlFor="NA" check>
                                         <Input type="radio" 
-                                            value="Na" 
-                                            checked={this.state.trainedFor === "Na"}
+                                            value="NA" 
+                                            checked={this.state.trainedFor === "NA"}
                                             onChange={this.handleTrainedForOptionChange} />{' '}
                                         Not applicable
                                     </Label>
@@ -278,7 +346,7 @@ export default class Register extends Component {
                             </FormGroup>
 
                             <FormGroup>
-                                <Label className="header-label" for="DogGuideNameorPuppyName">Name of dog guide or puppy:</Label>
+                                <Label className="header-label" htmlFor="DogGuideNameorPuppyName">Name of dog guide or puppy:</Label>
                                 <p>(if applicable)</p>
                                 <Input type="text"
                                     name="dogHistory" 
@@ -290,7 +358,7 @@ export default class Register extends Component {
                             </FormGroup>
 
                             <FormGroup>
-                                <Label className="header-label" for="DogBreed">Breed of dog:</Label>
+                                <Label className="header-label" htmlFor="DogBreed">Breed of dog:</Label>
                                 <Input type="text" className="form-control" 
                                     onChange={this.handleInputChange} 
                                     name="breed"
@@ -301,7 +369,7 @@ export default class Register extends Component {
                             </FormGroup>                            
 
                             <FormGroup>
-                                <Label className="header-label" for="TrainingProvider">Training provider or organisation: </Label>
+                                <Label className="header-label" htmlFor="TrainingProvider">Training provider or organisation: </Label>
                                 <p>(if applicable)</p>
                                 <Input type="text" className="form-control"
                                      onChange={this.handleInputChange}
@@ -313,7 +381,7 @@ export default class Register extends Component {
                             </FormGroup>
 
                             <FormGroup>
-                                <Label className="header-label" for="DogsTrainedforDisabilityOtherthanVisual">If your dog is also trained to assist you with a disability other than blindness or vision impairment. </Label>
+                                <Label className="header-label" htmlFor="DogsTrainedforDisabilityOtherthanVisual">If your dog is also trained to assist you with a disability other than blindness or vision impairment. </Label>
                                 Please indicate what the dog is trained for? 
                                 
                                 <Input type="textarea" className="form-control"
@@ -327,10 +395,10 @@ export default class Register extends Component {
                             </FormGroup>
 
                             <FormGroup>
-                            <Label className="header-label" for="exampleText">Do you work for a Dog Guide or other blindness organisation?</Label>                         
+                            <Label className="header-label" htmlFor="exampleText">Do you work for a Dog Guide or other blindness organisation?</Label>                         
 
                                 <FormGroup check>
-                                    <Label check>
+                                    <Label htmlFor="yes" check>
                                         <Input type="radio"
                                         value="yes" 
                                         checked={this.state.workFor === "yes"} 
@@ -341,7 +409,7 @@ export default class Register extends Component {
                             </FormGroup>
                             <FormGroup>
                                 <FormGroup check>
-                                    <Label check>
+                                    <Label htmlFor="no" check>
                                         <Input type="radio" 
                                             value="no" 
                                             checked={this.state.workFor === "no"} 
@@ -352,7 +420,7 @@ export default class Register extends Component {
                             </FormGroup>
 
                             <FormGroup>
-                                <Label className="header-label" for="NameoftheDogGuideProvider">If Yes, Name of Dog Guide or Assistance dog provider, or other blindness organisation:</Label>
+                                <Label className="header-label" htmlFor="NameoftheDogGuideProvider">If Yes, Name of Dog Guide or Assistance dog provider, or other blindness organisation:</Label>
                                 <Input type="text" 
                                     name="dogGuideProv" 
                                     value={this.state.dogGuideProv}
@@ -364,7 +432,7 @@ export default class Register extends Component {
                             </FormGroup>
 
                             <FormGroup>
-                                <Label className="header-label" for="PositionOrTitle">Position or Title:</Label>
+                                <Label className="header-label" htmlFor="PositionOrTitle">Position or Title:</Label>
                                 <Input type="text" className="form-control" 
                                     onChange={this.handleInputChange} 
                                     name="position"
