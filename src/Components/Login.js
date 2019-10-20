@@ -75,7 +75,7 @@ export default class Login extends Component {
                         <hr />
                         <FormGroup className="text-center">
                             <div className="acctInfo">Don't have an account?</div>
-                            <Link to="/Register3" className="btn btn-link" aria-label="re-direct to sign-up page" style={{ color: "black" }}>Sign Up Here</Link>
+                            <Link to="/Register" className="btn btn-link" aria-label="re-direct to sign-up page" style={{ color: "black" }}>Sign Up Here</Link>
                         </ FormGroup>
                     </Form>
                 </div>

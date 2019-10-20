@@ -16,3 +16,6 @@
   margin-top: 4%;
   background-color: #1A1A1A;
 }
+.errorMsg{
+  color: red;
+}

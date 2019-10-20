@@ -2,85 +2,62 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Container, Label, Form, FormGroup, FormText, Input, Button } from 'reactstrap';
 
-const emailRegex = RegExp(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/);
-
-const formValid = formErrors => {
-    let valid = true;
-
-    Object.values(formErrors).forEach(val => {
-        // if we have an error string set valid to false
-        val.length > 0 && (valid = false)
-    });
-    return valid;
+//Set the initial state 
+const initialState = {
+    firstName: '',
+    lastName: '',
+    email: '',
+    membershipType: '',
+    title: '',
+    dob: '',
+    streetAddress: '',
+    suburb: '',
+    state: '',
+    dogHistory: '',
+    //Need some extra fields in the backend
+    postcode: '',
+    phone: '',
+    breed: '',
+    organization: '',
+    dogGuideProv: '',
+    position: '',
+    trainedFor: '',
+    workFor: '',
+    otherTraining: '',
+    //Validation
+    fNameError: '',
+    lNameError: '',
+    emailError: '',
+    membershipTypeError: '',
+    titleError: '',   
+    streetAddressError: '',
+    suburbError: '',
+    stateError: '',    
+    postcodeError: '',
+    phoneError: '',
 }
 
 export default class Register extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            firstName: '',
-            lastName: '',
-            email: '',
-            membershipType: '',
-            title: '',
-            dob: '',
-            streetAddress: '',
-            suburb: '',
-            state: '',
-            dogHistory: '',
-            //Need some extra fields in the backend
-            postcode: '',
-            phone: '',
-            breed: '',
-            organization: '',
-            dogGuideProv: '',
-            position: '',
-            trainedFor: '',
-            workFor: '',
-            otherTraining: '',
-            //Validation
-            formErrors: {
-                firstName: '',
-                lastName: '',
-                email: ''
-            }
-        }
+        this.state = initialState;
     }
 
+    //Handle the inputbox changes
     handleInputChange = (e) => {
         e.preventDefault();
 
-        const {name, value} = e.target;
-        let formErrors = this.state.formErrors;
+        //Grab the input fields here
+        let inputName = e.target.name;
+        let inputValue = e.target.value;
 
-        switch(name){
-            case 'firstName':
-                formErrors.firstName =
-                value.length < 3 
-                ? "minimum 3 characters required" : "";
-                break;
-
-            case 'lastName':
-                formErrors.lastName =
-                value.length < 3 && value.length > 0 
-                ? "minimum 3 characters required" : "";
-                break;
-
-            case 'email':
-                formErrors.email =
-                emailRegex.test(value) && value.length > 0 
-                ? "": "invalid email address";
-                break;    
-
-            default:
-                break;
-        }
-
-        //Handle change events on input fields
-        this.setState({ formErrors, [name]: value}, () => console.log(this.state));
+        // //Handle change events on input fields
+        this.setState({
+            [inputName]: inputValue
+        });
         
     }
-
+    //Handle radio buttons
     handleTrainedForOptionChange = (e) => {
         this.setState({
             trainedFor: e.target.value
@@ -101,13 +78,128 @@ export default class Register extends Component {
         });
         console.log(this.state);
     }
+    //Validate errors
+    validate=()=>{
+        let fNameError = '';
+        let lNameError = '';        
+        let emailError = '';
+        let membershipTypeError= '';
+        let titleError= '';  
+        let streetAddressError= '';
+        let suburbError='';
+        let stateError= '';   
+        let postcodeError= '';
+        let phoneError= '';
+        let trainedForError = '';
+
+        //No blank inputs - validations
+        if(!this.state.firstName){            
+            fNameError = 'This field cannot be blank';            
+        }
+        if(!this.state.lastName){            
+            lNameError = 'This field cannot be blank';            
+        }
+        if(!this.state.title){            
+            titleError = 'This field cannot be blank';            
+        }
+        if(!this.state.streetAddress){            
+            streetAddressError = 'This field cannot be blank';            
+        }
+        if(this.state.streetAddress.length > 70){
+            streetAddressError = 'Invalid Street Address'; 
+        }
+        if(!this.state.suburb){            
+            suburbError = 'This field cannot be blank';           
+        }
+        if(this.state.suburb.length > 70){
+            suburbError = 'Invalid Suburb'; 
+        }
+        
+        //Radio button options check - validations
+        if(!this.state.membershipType){           
+            membershipTypeError = 'Please choose one of the given options';
+        }
+        if(!this.state.trainedFor){           
+            trainedForError = 'Please choose one of the given options';
+        }
+    
+        //Check for valid name and title
+        var fNamePattern=/^([a-zA-Z]{0,10})$/;
+
+        if(!fNamePattern.test(this.state.firstName)){            
+            fNameError = 'invalid firstname';
+        }
+        if(this.state.firstName.length > 10){
+            fNameError = 'firstname is too long';
+        }
+         //Check for valid name and title
+         var lNamePattern=/^([a-zA-Z]{0,10})$/;
+
+         if(!lNamePattern.test(this.state.lastName)){            
+             lNameError = 'invalid lastname';
+         }
+         if(this.state.lastName.length > 10){
+            lNameError = 'lastname is too long';
+        }
+          //Check for valid name and title
+        var titlePattern=/^([a-zA-Z]{0,10})$/;
+
+        if(!titlePattern.test(this.state.title)){            
+            titleError = 'invalid title';
+        }
+        if(this.state.lastName.length > 10){
+            lNameError = 'title is too long';
+        }
+
+        //Check for valid email
+        var emailPattern=/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+
+        if(!emailPattern.test(this.state.email)){
+            emailError = 'invalid email';
+        }
+       
+        //check for valid Aus PhoneNumber
+        var phonePattern= /^(?:\+?61|0)[2-478](?:[ -]?[0-9]){8}$/;
+
+        if(!phonePattern.test(this.state.phone)){
+            phoneError = 'invalid AUS phone number';
+        }
+
+        //Check for valid Aus PostCode
+        var postCodePattern= /^[0-9]{4}/;
+
+        if(!postCodePattern.test(this.state.postcode)){
+            postcodeError = 'invalid AUS postcode';
+        }
+
+        //Check for valid Aus States
+        var statePattern= /^(vic|victoria|nsw|newsouthwales|act|australiancapitalterritory|wa|westernaustralia|qld|queensland|sa|southaustralia|tas|tasmania)$/;
+
+        if(!statePattern.test(this.state.state.toLowerCase())){
+            stateError = 'invalid AUS state';
+        }
+        
+        
+        //If Error in input fields
+        if(emailError || fNameError || lNameError || titleError || streetAddressError|| suburbError
+            ||stateError||postcodeError||phoneError|| membershipTypeError || trainedForError){
+            this.setState({emailError, fNameError, lNameError, titleError, streetAddressError,
+            suburbError, stateError, postcodeError, phoneError, membershipTypeError, trainedForError});
+            //Input fields are not valid
+            return false;
+        }
+        //if no error. Input fields are valid    
+        return true;
+    }
 
     register = (e) => {
         //prevent browser from auto-submitting
         e.preventDefault();
         console.log(this.state);
+        const isValid = this.validate();
 
-        if(formValid(this.state.formErrors)){
+        //if no error, post the form
+        if(isValid){
             // fetch('http://dgha-backend-aus-east.azurewebsites.net/api/members', {
             //Typicode post test
             fetch('https://jsonplaceholder.typicode.com/posts', {
@@ -141,23 +233,22 @@ export default class Register extends Component {
             })
             .then(response => {
                 console.log(response);
+                //Clear form
+                this.setState(initialState);
+                //Navigate to review page
                 this.props.history.push("/Review");
             })
             .catch(error => {
                 console.log(error);
-            })
-            console.info('valid form')
+            })             
         }else{
-            console.error('Error');
-        }
-       
+            console.log("invalid form");
+        }      
     }
 
-    render() {
-        const {formErrors} = this.state;
+    render() {       
         
         return (
-
             <Container>
                 <div className="signup-wrapper flex justify-center flex-wrap" >
                     <div className="header" style={{ paddingBottom: "2%" }}>
@@ -169,13 +260,13 @@ export default class Register extends Component {
                          <FormGroup> 
                         <Label className="header-label" htmlFor="MembershipType">Membership Type:<span className="impt">*</span></Label> 
                         <p>Please choose Full or Associate Member</p>
-
                          <FormGroup check>
                             <Label htmlFor="FullMember" check>
                                 <Input type="radio" 
-                                    name="membershipType" value="Full Membership"
-                                    checked={this.state.membershipType === "Full Membership"} 
+                                    name="membershipType" value="Full Member"
+                                    checked={this.state.membershipType === "Full Member"} 
                                     onChange={this.handleMemTypeOptionChange} />{' '}
+                                    
                                 Full Member
                             </Label>
                         </FormGroup>
@@ -186,9 +277,12 @@ export default class Register extends Component {
                                         name="membershipType" value="Assosiate Member" 
                                         checked={this.state.membershipType === "Assosiate Member"} 
                                         onChange={this.handleMemTypeOptionChange} />{' '}
+                                         
                                     Associate Member
                             </Label>
                             </FormGroup>
+                        <span className="errorMsg">{this.state.membershipTypeError}</span>
+
                         </FormGroup> 
 
                       </FormGroup>  
@@ -200,6 +294,8 @@ export default class Register extends Component {
                                     onChange={this.handleInputChange} 
                                     name="title"
                                     value={this.state.title} required="required" />
+                                     <span className="errorMsg">{this.state.titleError}</span>
+
                                 <FormText color="muted">
                                     0-10 max characters
                             </FormText>
@@ -208,28 +304,29 @@ export default class Register extends Component {
                             <FormGroup>                                
                                 <Label className="header-label" htmlFor="FirstName">First Name: <span className="impt">*</span></Label>
                                 <Input type="text"
-                                className={formErrors.firstName.length > 0 ? "error" : null}                               
+                                className="form-control"                         
                                 onChange={this.handleInputChange} 
                                 name="firstName" 
                                 value={this.state.firstName}
                                 noValidate />
-                                {formErrors.firstName.length > 0 && 
-                                    <span className='errorMsg'>{formErrors.firstName}</span>} 
+                                 <span className="errorMsg">{this.state.fNameError}</span>
+                                 
                                 <FormText color="muted">
-                                    0-10 max characters
+                                {/* <span className="errorMsg">{this.state.fNameError.length}</span> */}
+                                    0-10 max characters                                    
                             </FormText>
 
                             </FormGroup>
                             <FormGroup>
                                 <Label className="header-label" htmlFor="LastName">Last Name: <span className="impt">*</span></Label>
                                 <Input type="text" 
-                                className={formErrors.lastName.length > 0 ? "error" : null} 
+                                className="form-control" 
                                 onChange={this.handleInputChange} 
                                 name="lastName" 
                                 value={this.state.lastName} 
                                 noValidate />
-                                {formErrors.lastName.length > 0 && 
-                                    <span className='errorMsg'>{formErrors.lastName}</span>} 
+                                 <span className="errorMsg">{this.state.lNameError}</span>
+                                
                                 <FormText color="muted">
                                     0-10 max characters
                             </FormText>
@@ -250,7 +347,11 @@ export default class Register extends Component {
                                 <Label className="header-label" htmlFor="StreetOrPostalAddress">Street or Postal Address: <span className="impt">*</span></Label>
                                 <Input type="text" className="form-control" 
                                     onChange={this.handleInputChange} 
-                                    name="streetAddress" value={this.state.streetAddress} required /> 
+                                    name="streetAddress" 
+                                    value={this.state.streetAddress} required
+                                     />                                   
+                                    <span className="errorMsg">{this.state.streetAddressError}</span>                                  
+
                                 <FormText color="muted">
                                     0-70 max characters
                             </FormText>
@@ -262,6 +363,8 @@ export default class Register extends Component {
                                     onChange={this.handleInputChange} 
                                     name="suburb" 
                                     value={this.state.suburb} required />
+                                     <span className="errorMsg">{this.state.suburbError}</span>
+
                                 <FormText color="muted">
                                     0-70 max characters
                             </FormText>
@@ -272,6 +375,8 @@ export default class Register extends Component {
                                 <Input type="text" className="form-control" 
                                     onChange={this.handleInputChange} 
                                     name="state" value={this.state.state} required />
+                                     <span className="errorMsg">{this.state.stateError}</span>
+
                                 <FormText color="muted">
                                     0-40 max characters
                             </FormText>
@@ -283,6 +388,8 @@ export default class Register extends Component {
                                     onChange={this.handleInputChange} 
                                     name="postcode"
                                     value={this.state.postcode} required />
+                                     <span className="errorMsg">{this.state.postcodeError}</span>
+
                                 <FormText color="muted">
                                     0-4 max characters
                             </FormText>
@@ -295,19 +402,20 @@ export default class Register extends Component {
                                     onChange={this.handleInputChange} 
                                     name="phone"
                                     value={this.state.phone} required />
+                                     <span className="errorMsg">{this.state.phoneError}</span>
+
                             </FormGroup>
                             
                             <FormGroup>
                                 <Label className="header-label" htmlFor="email">Email Address:<span className="impt">*</span></Label>
                                 <Input type="email" 
-                                    className={formErrors.email.length > 0 ? "error" : null}
+                                    className="form-control" 
                                     onChange={this.handleInputChange} 
                                     name="email" 
                                     value={this.state.email} 
                                     noValidate />
-                                    {formErrors.email.length > 0 && (
-                                        <span className="errorMessage">{formErrors.email}</span>
-                                    )}
+                                    <span className="errorMsg">{this.state.emailError}</span>
+                                    
                             </FormGroup>
 
                             <FormGroup>
@@ -343,6 +451,8 @@ export default class Register extends Component {
                                         Not applicable
                                     </Label>
                                 </FormGroup>
+                                <span className="errorMsg">{this.state.trainedForError}</span>
+
                             </FormGroup>
 
                             <FormGroup>
