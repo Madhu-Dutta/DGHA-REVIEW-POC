@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Container, Label, Form, FormGroup, FormText, Input, Button } from 'reactstrap';
 
-// const emailRegex = RegExp(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/);
-
 //Set the initial state 
 const initialState = {
     firstName: '',
@@ -85,37 +83,67 @@ export default class Register3 extends Component {
         let fNameError = '';
         let lNameError = '';        
         let emailError = '';
-        // let membershipTypeError= '';
-        // let titleError= '';  
-        // let streetAddressError= '';
-        // let suburbError='';
-        // let stateError= '';   
-        // let postcodeError= '';
-        // let phoneError= '';
+        let membershipTypeError= '';
+        let titleError= '';  
+        let streetAddressError= '';
+        let suburbError='';
+        let stateError= '';   
+        let postcodeError= '';
+        let phoneError= '';
+        let trainedForError = '';
 
-        //check for valid names
-        if(!this.state.firstName || !this.state.lastName){
-            fNameError = 'This field cannot be blank';
-            lNameError = 'This field cannot be blank';
-            // titleError = 'This field cannot be blank';
-            // streetAddressError = 'This field cannot be blank';
-            // suburbError = 'This field cannot be blank';
-            // stateError = 'This field cannot be blank';
-            // postcodeError = 'This field cannot be blank';
-            // phoneError = 'This field cannot be blank';
-            
+        //No blank inputs - validations
+        if(!this.state.firstName){
+            fNameError = 'This field cannot be blank';            
+        }        
+        if(!this.state.lastName){            
+            lNameError = 'This field cannot be blank';            
+        }
+        if(!this.state.title){
+            titleError = 'This field cannot be blank';           
+        }
+        if(!this.state.streetAddress){            
+            streetAddressError = 'This field cannot be blank';            
+        }
+        if(!this.state.suburb){            
+            suburbError = 'This field cannot be blank';           
+        }
+        if(!this.state.state){            
+            stateError = 'This field cannot be blank';           
+        }
+        if(!this.state.postcode){            
+            postcodeError = 'This field cannot be blank';          
+        }
+        if(!this.state.phone){           
+            phoneError = 'This field cannot be blank';           
+        }
+        //Radio button options check - validations
+        if(!this.state.membershipType){           
+            membershipTypeError = 'Please choose one of the given options';
+        }
+        if(!this.state.trainedFor){           
+            trainedForError = 'Please choose one of the given options';
+        }
+        //Input fields Length check
+        if(this.state.firstName.length > 10){
+            fNameError ="First name is too long" 
         }
 
         //Check for valid email
-        if(!this.state.email.includes('@')){
+        var emailPattern=/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+
+        if(!emailPattern.test(this.state.email)){
             emailError = 'invalid email';
         }
-        if(emailError || fNameError || lNameError ){
-            this.setState({emailError, fNameError, lNameError});
-            //email is not valid
+        //If Error in input fields
+        if(emailError || fNameError || lNameError || titleError || streetAddressError|| suburbError
+            ||stateError||postcodeError||phoneError|| membershipTypeError || trainedForError){
+            this.setState({emailError, fNameError, lNameError, titleError, streetAddressError,
+            suburbError, stateError, postcodeError, phoneError, membershipTypeError, trainedForError});
+            //Input fields are not valid
             return false;
         }
-        //if no error set email error to empty. ie, email is valid       
+        //if no error. Input fields are valid    
         return true;
     }
 
@@ -188,13 +216,13 @@ export default class Register3 extends Component {
                          <FormGroup> 
                         <Label className="header-label" htmlFor="MembershipType">Membership Type:<span className="impt">*</span></Label> 
                         <p>Please choose Full or Associate Member</p>
-
                          <FormGroup check>
                             <Label htmlFor="FullMember" check>
                                 <Input type="radio" 
-                                    name="membershipType" value="Full Membership"
-                                    checked={this.state.membershipType === "Full Membership"} 
+                                    name="membershipType" value="Full Member"
+                                    checked={this.state.membershipType === "Full Member"} 
                                     onChange={this.handleMemTypeOptionChange} />{' '}
+                                    
                                 Full Member
                             </Label>
                         </FormGroup>
@@ -205,9 +233,12 @@ export default class Register3 extends Component {
                                         name="membershipType" value="Assosiate Member" 
                                         checked={this.state.membershipType === "Assosiate Member"} 
                                         onChange={this.handleMemTypeOptionChange} />{' '}
+                                         
                                     Associate Member
                             </Label>
                             </FormGroup>
+                        <span className="errorMsg">{this.state.membershipTypeError}</span>
+
                         </FormGroup> 
 
                       </FormGroup>  
@@ -219,6 +250,8 @@ export default class Register3 extends Component {
                                     onChange={this.handleInputChange} 
                                     name="title"
                                     value={this.state.title} required="required" />
+                                     <span className="errorMsg">{this.state.titleError}</span>
+
                                 <FormText color="muted">
                                     0-10 max characters
                             </FormText>
@@ -235,7 +268,8 @@ export default class Register3 extends Component {
                                  <span className="errorMsg">{this.state.fNameError}</span>
                                  
                                 <FormText color="muted">
-                                    0-10 max characters
+                                {/* <span className="errorMsg">{this.state.fNameError.length}</span> */}
+                                    0-10 max characters                                    
                             </FormText>
 
                             </FormGroup>
@@ -269,7 +303,9 @@ export default class Register3 extends Component {
                                 <Label className="header-label" htmlFor="StreetOrPostalAddress">Street or Postal Address: <span className="impt">*</span></Label>
                                 <Input type="text" className="form-control" 
                                     onChange={this.handleInputChange} 
-                                    name="streetAddress" value={this.state.streetAddress} required /> 
+                                    name="streetAddress" value={this.state.streetAddress} required />
+                                     <span className="errorMsg">{this.state.streetAddressError}</span>
+
                                 <FormText color="muted">
                                     0-70 max characters
                             </FormText>
@@ -281,6 +317,8 @@ export default class Register3 extends Component {
                                     onChange={this.handleInputChange} 
                                     name="suburb" 
                                     value={this.state.suburb} required />
+                                     <span className="errorMsg">{this.state.suburbError}</span>
+
                                 <FormText color="muted">
                                     0-70 max characters
                             </FormText>
@@ -291,6 +329,8 @@ export default class Register3 extends Component {
                                 <Input type="text" className="form-control" 
                                     onChange={this.handleInputChange} 
                                     name="state" value={this.state.state} required />
+                                     <span className="errorMsg">{this.state.stateError}</span>
+
                                 <FormText color="muted">
                                     0-40 max characters
                             </FormText>
@@ -302,6 +342,8 @@ export default class Register3 extends Component {
                                     onChange={this.handleInputChange} 
                                     name="postcode"
                                     value={this.state.postcode} required />
+                                     <span className="errorMsg">{this.state.postcodeError}</span>
+
                                 <FormText color="muted">
                                     0-4 max characters
                             </FormText>
@@ -314,6 +356,8 @@ export default class Register3 extends Component {
                                     onChange={this.handleInputChange} 
                                     name="phone"
                                     value={this.state.phone} required />
+                                     <span className="errorMsg">{this.state.phoneError}</span>
+
                             </FormGroup>
                             
                             <FormGroup>
@@ -361,6 +405,8 @@ export default class Register3 extends Component {
                                         Not applicable
                                     </Label>
                                 </FormGroup>
+                                <span className="errorMsg">{this.state.trainedForError}</span>
+
                             </FormGroup>
 
                             <FormGroup>
