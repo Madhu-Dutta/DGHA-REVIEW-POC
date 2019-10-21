@@ -113,6 +113,9 @@ export default class Register extends Component {
     if (!this.state.title) {
       titleError = "This field cannot be blank";
     }
+    if (!this.state.password) {
+      passwordError = "Cannot be blank";
+    }
     if (!this.state.streetAddress) {
       streetAddressError = "This field cannot be blank";
     }
@@ -125,9 +128,7 @@ export default class Register extends Component {
     if (this.state.suburb.length > 70) {
       suburbError = "Invalid Suburb";
     }
-    // if (this.state.password) {
-    //   passwordError = "Cannot be blank";
-    // }
+
     //Radio button options check - validations
     if (!this.state.membershipType) {
       membershipTypeError = "Please choose one of the given options";
@@ -171,6 +172,12 @@ export default class Register extends Component {
       emailError = "invalid email";
     }
 
+    //Check for valid password
+    var passwordPattern = /^.{4,8}$/;
+
+    if (!passwordPattern.test(this.state.password)) {
+      passwordError = "Password must be 3-8 characters long";
+    }
     //check for valid Aus PhoneNumber
     var phonePattern = /^(?:\+?61|0)[2-478](?:[ -]?[0-9]){8}$/;
 
@@ -236,8 +243,6 @@ export default class Register extends Component {
     //if no error, post the form
     if (isValid) {
       fetch('http://dgha-backend-aus-east.azurewebsites.net/api/members', {
-        //Typicode post test
-        // fetch("https://jsonplaceholder.typicode.com/posts", {
         method: "post",
         headers: {
           Accept: "application/json",
@@ -506,7 +511,7 @@ export default class Register extends Component {
                 value={this.state.password}
                 noValidate
               />
-              {/* <span className="errorMsg">{this.state.passwordError}</span> */}
+              <span className="errorMsg">{this.state.passwordError}</span>
             </FormGroup>
 
             <FormGroup>
@@ -719,7 +724,7 @@ export default class Register extends Component {
           secure PayPal, use the Donate button below.
           <div>
             <Button id="paypal">Donate</Button>
-          </div> */}
+          </div>*/}
         </div>
       </Container>
     );

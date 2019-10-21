@@ -6,7 +6,6 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 import Review from "./Components/Review";
 import Login from "./Components/Login";
 import Register from "./Components/Register";
-import SuccessfulReg from "./Components/SuccessfulReg";
 import * as serviceWorker from "./serviceWorker";
 
 ReactDOM.render(
@@ -15,7 +14,6 @@ ReactDOM.render(
       <Switch>
         <Route exact path="/" component={Login} />
         <Route path="/Register" component={Register} />
-        <Route path="/SuccessfulReg" component={SuccessfulReg} />
         <Route path="/Review" component={Review} />
       </Switch>
     </React.Fragment>
