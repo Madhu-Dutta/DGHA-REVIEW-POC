@@ -23,6 +23,7 @@ const initialState = {
   state: "",
   dogName: "",
   //Need some extra fields in the backend
+  password: "",
   postcode: "",
   phone: "",
   breed: "",
@@ -42,7 +43,8 @@ const initialState = {
   suburbError: "",
   stateError: "",
   postcodeError: "",
-  phoneError: ""
+  phoneError: "",
+  passwordError: ""
 };
 
 export default class Register extends Component {
@@ -63,6 +65,7 @@ export default class Register extends Component {
     this.setState({
       [inputName]: inputValue
     });
+    console.log(this.state);
   };
   //Handle radio buttons
   handleTrainedForOptionChange = e => {
@@ -98,6 +101,7 @@ export default class Register extends Component {
     let postcodeError = "";
     let phoneError = "";
     let trainedForError = "";
+    let passwordError = "";
 
     //No blank inputs - validations
     if (!this.state.firstName) {
@@ -121,7 +125,9 @@ export default class Register extends Component {
     if (this.state.suburb.length > 70) {
       suburbError = "Invalid Suburb";
     }
-
+    // if (this.state.password) {
+    //   passwordError = "Cannot be blank";
+    // }
     //Radio button options check - validations
     if (!this.state.membershipType) {
       membershipTypeError = "Please choose one of the given options";
@@ -197,7 +203,8 @@ export default class Register extends Component {
       postcodeError ||
       phoneError ||
       membershipTypeError ||
-      trainedForError
+      trainedForError ||
+      passwordError
     ) {
       this.setState({
         emailError,
@@ -210,7 +217,8 @@ export default class Register extends Component {
         postcodeError,
         phoneError,
         membershipTypeError,
-        trainedForError
+        trainedForError,
+        passwordError
       });
       //Input fields are not valid
       return false;
@@ -247,6 +255,7 @@ export default class Register extends Component {
           state: this.state.state,
           dogName: this.state.dogName,
           //Need some extra fields in the backend
+          password: this.state.password,
           postcode: this.state.postcode,
           phone: this.state.phone,
           breed: this.state.breed,
@@ -483,6 +492,21 @@ export default class Register extends Component {
                 noValidate
               />
               <span className="errorMsg">{this.state.emailError}</span>
+            </FormGroup>
+
+            <FormGroup>
+              <Label className="header-label" htmlFor="password">
+                Password:<span className="impt">*</span>
+              </Label>
+              <Input
+                type="password"
+                className="form-control"
+                onChange={this.handleInputChange}
+                name="password"
+                value={this.state.password}
+                noValidate
+              />
+              {/* <span className="errorMsg">{this.state.passwordError}</span> */}
             </FormGroup>
 
             <FormGroup>
