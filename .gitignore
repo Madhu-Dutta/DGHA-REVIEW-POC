@@ -1,3 +1,6 @@
+# JetBrains WebStorm config files
+.idea
+
 # Logs
 logs
 *.log

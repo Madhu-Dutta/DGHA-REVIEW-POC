@@ -1,15 +1,15 @@
-  #button{ 
-      margin-top: 25px;
-      height: 50px;
-      background-color: #1A1A1A;
-      color: white;
-      font-weight: bold;
-  }  
-  a:hover{
-      font-weight: bold;
-      color: white;
-      text-decoration: none;
-  }
- .acctInfo{
-   font-weight: bold;
- }
+#button {
+  margin-top: 25px;
+  height: 50px;
+  background-color: #1a1a1a;
+  color: white;
+  font-weight: bold;
+}
+a:hover {
+  font-weight: bold;
+  color: white;
+  text-decoration: none;
+}
+.acctInfo {
+  font-weight: bold;
+}
