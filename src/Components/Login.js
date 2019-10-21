@@ -17,17 +17,17 @@ export default class Login extends Component {
 
     //Initial state
     this.state = {
-      Email: "",
-      Password: ""
+      email: "",
+      password: ""
     };
   }
 
-  Email = e => {
-    this.setState({ UserName: e.target.value });
+  email = e => {
+    this.setState({ email: e.target.value });
   };
   //Password update on input text change
-  Password = e => {
-    this.setState({ Password: e.target.value });
+  password = e => {
+    this.setState({ password: e.target.value });
   };
   //OnClick event on the login button
   login = e => {
@@ -50,10 +50,10 @@ export default class Login extends Component {
           <Form name="form" onSubmit={this.login}>
             <FormGroup>
               <Input
-                type="text"
+                type="email"
                 className="form-control"
-                onChange={this.Email}
-                name="Email"
+                onChange={this.email}
+                name="email"
                 placeholder="Email"
                 required
               />
@@ -62,7 +62,7 @@ export default class Login extends Component {
               <Input
                 type="password"
                 className="form-control"
-                onChange={this.Password}
+                onChange={this.password}
                 name="password"
                 placeholder="Password"
                 required
