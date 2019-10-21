@@ -7,7 +7,7 @@ import {
   FormGroup,
   FormText,
   Input,
-  Button
+  // Button
 } from "reactstrap";
 
 //Set the initial state
@@ -714,12 +714,12 @@ export default class Register extends Component {
               </Link>
             </FormGroup>
           </Form>
-          <h4>Pay with PayPal</h4>
+          {/* <h4>Pay with PayPal</h4>
           Pay online using your PayPal account, or using your credit card, with
           secure PayPal, use the Donate button below.
           <div>
             <Button id="paypal">Donate</Button>
-          </div>
+          </div> */}
         </div>
       </Container>
     );
