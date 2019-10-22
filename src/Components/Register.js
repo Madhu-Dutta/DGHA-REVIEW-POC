@@ -6,8 +6,7 @@ import {
   Form,
   FormGroup,
   FormText,
-  Input,
-  // Button
+  Input
 } from "reactstrap";
 
 //Set the initial state
@@ -242,7 +241,7 @@ export default class Register extends Component {
 
     //if no error, post the form
     if (isValid) {
-      fetch('http://dgha-backend-aus-east.azurewebsites.net/api/members', {
+      fetch('https://dgha-backend-aus-east.azurewebsites.net/api/members', {
         method: "post",
         headers: {
           Accept: "application/json",
