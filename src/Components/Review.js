@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Redirect } from "react-router-dom";
 import PlacesSearch from "./Places/PlacesSearch";
 
 export default class Review extends Component {
@@ -12,13 +13,15 @@ export default class Review extends Component {
 
   logout = () => {
     console.log("logout");
+    sessionStorage.setItem('userData', '');
+    sessionStorage.clear();
     this.setState({
       redirect: true
     });
   };
   render() {
-    if (this.state.redirect === true) {
-      this.props.history.push("/");
+    if (this.state.redirect) {
+      return (<Redirect to={"/"} />);
     }
     return (
       <div>

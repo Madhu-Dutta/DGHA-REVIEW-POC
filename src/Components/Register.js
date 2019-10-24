@@ -6,7 +6,8 @@ import {
   Form,
   FormGroup,
   FormText,
-  Input
+  Input,
+  // Button
 } from "reactstrap";
 
 //Set the initial state
@@ -253,33 +254,35 @@ export default class Register extends Component {
           email: this.state.email,
           membershipType: this.state.membershipType,
           title: this.state.title,
-          dob: this.state.dob,
           streetAddress: this.state.streetAddress,
           suburb: this.state.suburb,
           state: this.state.state,
-          dogName: this.state.dogName,
-          //Need some extra fields in the backend
           password: this.state.password,
           postcode: this.state.postcode,
           phone: this.state.phone,
+          trainedFor: this.state.trainedFor,
+          //optional Fields
+          dob: this.state.dob,
+          dogName: this.state.dogName,
           breed: this.state.breed,
           organization: this.state.organization,
           dogGuideProv: this.state.dogGuideProv,
           position: this.state.position,
-          trainedFor: this.state.trainedFor,
           workFor: this.state.workFor,
           otherTraining: this.state.otherTraining
         })
-      })
+      },
+        //set browser cookie
+        { withCredentials: true })
         .then(response => {
-          console.log(response);
+          console.log("Registration response", response);
           //Clear form
           this.setState(initialState);
           //Navigate to review page
-          this.props.history.push("/Review");
+          this.props.history.push("/confirmRegistration");
         })
         .catch(error => {
-          console.log(error);
+          console.log("Registration error", error);
         });
     } else {
       console.log("invalid form");

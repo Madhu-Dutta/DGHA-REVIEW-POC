@@ -9,7 +9,8 @@ import {
   Row,
   Col
 } from "reactstrap";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
+import { PostData } from "../services/PostData";
 
 export default class Login extends Component {
   constructor() {
@@ -18,25 +19,52 @@ export default class Login extends Component {
     //Initial state
     this.state = {
       email: "",
-      password: ""
+      password: "",
+      redirect: false,
+      error: ""
     };
   }
 
-  email = e => {
-    this.setState({ email: e.target.value });
+  //Handle the inputbox changes
+  handleInputChange = e => {
+    e.preventDefault();
+
+    //Grab the input fields here
+    let inputName = e.target.name;
+    let inputValue = e.target.value;
+
+    // //Handle change events on input fields
+    this.setState({
+      [inputName]: inputValue
+    });
+    console.log(this.state);
   };
-  //Password update on input text change
-  password = e => {
-    this.setState({ password: e.target.value });
-  };
+
   //OnClick event on the login button
   login = e => {
     e.preventDefault();
-    console.log("Clicked");
+    console.log("Clicked", this.state);
+
     // debugger;
-  };
+    PostData(this.state).then((result) => {
+      let responseJSON = result;
+      console.log(responseJSON);
+      if (responseJSON.token) {
+        sessionStorage.setItem('userData', responseJSON);
+        this.setState({ redirect: true })
+      } else {
+        console.log('login error');
+      }
+    })
+  }
 
   render() {
+    if (this.state.redirect) {
+      return (<Redirect to={"/Review"} />);
+    }
+    if (sessionStorage.getItem('userData')) {
+      return (<Redirect to={'/Review'} />);
+    }
     return (
       <Container>
         <div className="login-wrapper">
@@ -50,11 +78,11 @@ export default class Login extends Component {
           <Form name="form" onSubmit={this.login}>
             <FormGroup>
               <Input
-                type="email"
+                type="text"
                 className="form-control"
-                onChange={this.email}
+                onChange={this.handleInputChange}
                 name="email"
-                placeholder="Email"
+                placeholder="email"
                 required
               />
             </FormGroup>
@@ -62,7 +90,7 @@ export default class Login extends Component {
               <Input
                 type="password"
                 className="form-control"
-                onChange={this.password}
+                onChange={this.handleInputChange}
                 name="password"
                 placeholder="Password"
                 required
